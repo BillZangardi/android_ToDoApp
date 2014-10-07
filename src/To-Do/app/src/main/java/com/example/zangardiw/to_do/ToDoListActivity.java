@@ -1,6 +1,7 @@
 package com.example.zangardiw.to_do;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -13,41 +14,37 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 
-public class ToDoListActivity extends Activity {
+public class ToDoListActivity extends Activity implements NewItemFragment.OnNewItemAddListener {
 
-    @Override
+
+    private ToDoItemAdapter aa;
+    private ArrayList<ToDoItem> toDoItems;
+
+    public void onNewItemAdded(String newItem){
+        ToDoItem td = new ToDoItem(newItem);
+        toDoItems.add(0, td);
+        aa.notifyDataSetChanged();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
 
-        // Get references to UI widgets
-        ListView myListView = (ListView)findViewById(R.id.myListView);
-        final EditText myEditText = (EditText)findViewById(R.id.myEditText);
+
+        // Get references to the Fragments
+        FragmentManager fm = getFragmentManager();
+        ToDoListFragment toDoListFragment = (ToDoListFragment)fm.findFragmentById(R.id.ToDoListFragment);
 
         // Create the arraylist of to do items
-        final ArrayList<String> toDoItems = new ArrayList<String>();
+        toDoItems = new ArrayList<ToDoItem>();
 
         // Create the array adapter too bind the array to the list view
-        final ArrayAdapter<String> aa;
 
-        aa= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, toDoItems);
+        int resID = R.layout.todolist_item;
+        aa= new ToDoItemAdapter(this, resID, toDoItems);
 
         //bind the Array Adapter to the list view
-        myListView.setAdapter(aa);
-
-        myEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN)
-                    if((keyCode == KeyEvent.KEYCODE_DPAD_DOWN) || (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        toDoItems.add(0, myEditText.getText().toString());
-                        aa.notifyDataSetChanged();
-                        myEditText.setText("");
-                        return true;
-                    }
-                return false;
-            }
-        });
+        toDoListFragment.setListAdapter(aa);
 
 
     }

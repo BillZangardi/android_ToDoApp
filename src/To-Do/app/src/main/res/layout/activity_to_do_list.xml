@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/myEditText"
+    <fragment android:name="com.example.zangardiw.to_do.NewItemFragment"
+        android:id="@+id/NewItemFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/addItemHint"
-        android:contentDescription="@string/addItemContentDescription"
-        />
-    <ListView
-        android:id="@+id/myListView"
+    />
+    <fragment android:name="com.example.zangardiw.to_do.ToDoListFragment"
+        android:id="@+id/ToDoListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"
+    />
 
 </LinearLayout>
